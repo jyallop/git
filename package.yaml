@@ -37,6 +37,7 @@ executables:
     - git
     - argparser
     - config-ini
+    - text
 
 tests:
   git-test:

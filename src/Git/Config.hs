@@ -1,6 +1,5 @@
 module Git.Config where
 
 data Config = Config {
-    flag :: Bool,
-    other :: String
-}
+    formatVersion :: Int
+} deriving (Show)
