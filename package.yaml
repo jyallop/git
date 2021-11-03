@@ -24,6 +24,12 @@ dependencies:
 
 library:
   source-dirs: src
+  dependencies:
+  - config-ini
+  - text
+  - filepath
+  - lens
+  - directory
 
 executables:
   git-exe:
@@ -38,6 +44,7 @@ executables:
     - argparser
     - config-ini
     - text
+    - filepath
 
 tests:
   git-test:
