@@ -5,6 +5,7 @@ import Git.Config
 import System.FilePath.Posix
 import Control.Lens
 import System.Directory
+import Debug.Trace
 
 data Repository = Repository {
   _worktree :: FilePath,
@@ -25,10 +26,10 @@ configFilePath :: Repository -> FilePath
 configFilePath repo = (repo ^. gitdir) </> "config"
 
 verifyRepository :: FilePath -> FilePath -> FilePath -> IO Bool
-verifyRepository worktree gitdir configpath = do
+verifyRepository worktree gitdir configfile = do
   worktreeExists <- doesDirectoryExist worktree
-  gitdirExists <- doesDirectoryExist gitdir
-  configExists <- doesFileExist configpath
+  gitdirExists <- doesDirectoryExist (worktree </> gitdir)
+  configExists <- doesFileExist (worktree </> gitdir </> configfile)
   return $ worktreeExists && gitdirExists && configExists
 
 verifyRepo :: Repository -> IO Bool
