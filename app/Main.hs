@@ -25,8 +25,9 @@ git :: Git -> IO ()
 git (Init dir forced) =
   let path = dir </> ".git"
   in
-    verifyRepo dir path (path </> "config") >>=
-    putStrLn . show >>
-    readConfig (path </> "config") >>=
-    return . buildRepo dir path >>=
-    putStrLn . show
+    createRepo dir >>=
+    verifyRepo >>=
+    (\isVerified -> if isVerified then 
+        putStrLn "Repo Created Successfully"
+      else
+        putStrLn "Error in initializing repo")

@@ -24,10 +24,21 @@ buildRepo worktree gitdir config = Repository {
 configFilePath :: Repository -> FilePath
 configFilePath repo = (repo ^. gitdir) </> "config"
 
-verifyRepo :: FilePath -> FilePath -> FilePath -> IO Bool
-verifyRepo worktree gitdir configpath = do
+verifyRepository :: FilePath -> FilePath -> FilePath -> IO Bool
+verifyRepository worktree gitdir configpath = do
   worktreeExists <- doesDirectoryExist worktree
   gitdirExists <- doesDirectoryExist gitdir
   configExists <- doesFileExist configpath
   return $ worktreeExists && gitdirExists && configExists
-                          
+
+verifyRepo :: Repository -> IO Bool
+verifyRepo (Repository { _worktree = wt, _gitdir = gd, _config = c }) = verifyRepository wt gd "config"
+
+createRepo :: FilePath -> IO Repository
+createRepo worktree =
+  let gitdir = worktree </> ".git"
+  in
+  createDirectoryIfMissing True gitdir >>
+  createConfig gitdir >>
+  readConfig (worktree </> ".git" </> "config") >>=
+  return . buildRepo worktree ".git" 

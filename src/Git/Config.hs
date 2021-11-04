@@ -4,6 +4,7 @@ module Git.Config where
 import Data.Ini.Config
 import Data.Text
 import System.IO
+import System.FilePath.Posix
 
 data Config = Config {
     formatVersion :: Int
@@ -25,3 +26,7 @@ configParser = do
 handleError :: Either String Config -> Config
 handleError (Right config) = config
 handleError (Left errorText) = error ("error parsing config: " ++ errorText)
+
+createConfig :: FilePath -> IO ()
+createConfig gitdir  =
+  writeFile (gitdir </> "config") "[core]\n\trepositoryformatversion = 0"
